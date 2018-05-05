@@ -1,0 +1,12 @@
+default:
+  suites:
+    group_delete:
+      paths:
+        - '%paths.base%/Features/Group'
+      contexts:
+         - InternationsBehat\Context\Ui\User\FixtureContext
+         - InternationsBehat\Context\Ui\User\LoginContext
+         - InternationsBehat\Context\Ui\Group\DeleteContext
+         - InternationsBehat\Context\Ui\Group\FixtureContext
+      filters:
+        tags: "@group_delete"

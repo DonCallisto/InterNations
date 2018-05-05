@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+    <ul>
+        {% for user in users %}
+            <li>
+                <a href="{{ path('update-user', {'id': user.id}) }}" data-user-update="{{ user.username }}">
+                    {{ user.username }}
+                </a>
+                -
+                <a href="{{ path('delete-user', {'id': user.id}) }}" data-user-delete="{{ user.username }}">
+                    Delete {{ user.username }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

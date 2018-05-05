@@ -1,0 +1,11 @@
+default:
+  extensions:
+    Behat\Symfony2Extension: ~
+
+    Behat\MinkExtension:
+      sessions:
+        default:
+          symfony2: ~
+      base_url: http://127.0.0.1:8000/app_dev.php
+
+    SensioLabs\Behat\PageObjectExtension: ~

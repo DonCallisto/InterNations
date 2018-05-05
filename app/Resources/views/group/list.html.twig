@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    {{ parent() }}
+    <ul>
+        {% for group in groups %}
+            <li>
+                {{ group.name }}
+                -
+                <a href="{{ path('delete-group', {'id': group.id}) }}" data-group-delete="{{ group.name }}">
+                    Delete {{ group.name }}
+                </a>
+            </li>
+        {% endfor %}
+    </ul>
+{% endblock %}

@@ -1,0 +1,11 @@
+default:
+  suites:
+    user_update:
+      paths:
+        - '%paths.base%/Features/User'
+      contexts:
+         - InternationsBehat\Context\Ui\User\FixtureContext
+         - InternationsBehat\Context\Ui\User\LoginContext
+         - InternationsBehat\Context\Ui\User\UpdateContext
+      filters:
+        tags: "@user_update"
