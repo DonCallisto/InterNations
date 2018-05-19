@@ -12,7 +12,7 @@ class LoginPage extends Page
 
     public function login(string $username, string $password)
     {
-        // @todo: change with data attribute after template override
+        // We should use data attribute instead of labels in order to make this less fragile
         $this->fillField('Username', $username);
         $this->fillField('Password', $password);
         $this->pressButton('Log in');

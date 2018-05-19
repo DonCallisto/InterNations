@@ -8,7 +8,6 @@ parameters:
     locale: en
 
 framework:
-    #esi: ~
     translator: ~
     secret: '%secret%'
     router:
@@ -17,11 +16,9 @@ framework:
     form: ~
     csrf_protection: ~
     validation: { enable_annotations: true }
-    #serializer: { enable_annotations: true }
     default_locale: '%locale%'
     trusted_hosts: ~
     session:
-        # https://symfony.com/doc/current/reference/configuration/framework.html#handler-id
         handler_id: session.handler.native_file
         save_path: '%kernel.project_dir%/var/sessions/%kernel.environment%'
     fragments: ~
@@ -30,12 +27,10 @@ framework:
     php_errors:
         log: true
 
-# Twig Configuration
 twig:
     debug: '%kernel.debug%'
     strict_variables: '%kernel.debug%'
 
-# Doctrine Configuration
 doctrine:
     dbal:
         driver: pdo_mysql
@@ -51,7 +46,6 @@ doctrine:
         naming_strategy: doctrine.orm.naming_strategy.underscore
         auto_mapping: true
 
-# Swiftmailer Configuration
 swiftmailer:
     transport: '%mailer_transport%'
     host: '%mailer_host%'
@@ -59,7 +53,6 @@ swiftmailer:
     password: '%mailer_password%'
     spool: { type: memory }
 
-# app/config/config.yml
 fos_user:
     db_driver: orm
     firewall_name: main
@@ -69,3 +62,21 @@ fos_user:
     from_email:
         address: "test@test.com"
         sender_name: "John Doe"
+
+lexik_jwt_authentication:
+    private_key_path: '%jwt_private_key_path%'
+    public_key_path:  '%jwt_public_key_path%'
+    pass_phrase:      '%jwt_key_pass_phrase%'
+    token_ttl:        '%jwt_token_ttl%'
+
+api_platform:
+    swagger:
+        api_keys:
+            apiKey:
+                name: Authorization
+                type: header
+
+    exception_to_status:
+        AppBundle\CommandHandler\UserHandlingForbiddenException: 403
+        AppBundle\CommandHandler\GroupHandlingForbiddenException: 403
+        AppBundle\CommandHandler\DeleteNonEmptyGroupException: 403

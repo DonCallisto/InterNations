@@ -1,0 +1,11 @@
+default:
+  suites:
+    user_api_delete:
+      paths:
+        - '%paths.base%/Features/User'
+      contexts:
+         - InternationsBehat\Context\API\User\LoginContext: { userRepository: '@AppBundle\Repository\UserRepository', JWTManager: '@Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface', client: '@eight_points_guzzle.client.api' }
+         - InternationsBehat\Context\API\User\DeleteContext: { client: '@eight_points_guzzle.client.api', userRepository: '@AppBundle\Repository\UserRepository' }
+         - InternationsBehat\Context\UserFixtureContext
+      filters:
+        tags: "@user_delete && @api"

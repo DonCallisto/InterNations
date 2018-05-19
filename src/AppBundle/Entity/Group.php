@@ -43,16 +43,23 @@ class Group
         return $this->users->count() != 0;
     }
 
-    public function addUser(User $user)
+    public function addUser(User $user): bool
     {
         $criteria = $this->getUserMatchingCriteriaForFilters($user);
 
         if ($this->users->matching($criteria)->contains($user)) {
-            return;
+            return false;
         }
 
         $this->users->add($user);
         $user->addGroupToUser($this);
+
+        return true;
+    }
+
+    public function getUsers()
+    {
+        return $this->users;
     }
 
     private function getUserMatchingCriteriaForFilters(User $user): Criteria
@@ -60,15 +67,17 @@ class Group
         return Criteria::create()->where(Criteria::expr()->eq("id", $user->getId()));
     }
 
-    public function removeUser(User $user)
+    public function removeUser(User $user): bool
     {
         $criteria = $this->getUserMatchingCriteriaForFilters($user);
 
-        if ($this->users->matching($criteria)->contains($user)) {
-            return;
+        if (!$this->users->matching($criteria)->contains($user)) {
+            return false;
         }
 
         $this->users->removeElement($user);
         $user->removeGroupFromUser($this);
+
+        return true;
     }
 }

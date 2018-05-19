@@ -4,33 +4,48 @@ declare(strict_types=1);
 
 namespace AppBundle\Model\User;
 
-use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
-class UserRegistrationCommand
+class UserRegistrationCommand implements UserRegistrationCommandInterface
 {
-    /**
-     * @Assert\NotBlank()
-     */
     public $username;
 
-    /**
-     * @Assert\NotBlank()
-     */
     public $password;
 
-    /**
-     * @Assert\NotBlank()
-     * @Assert\Email()
-     */
     public $email;
 
-    /**
-     * @Assert\NotBlank()
-     */
     public $name;
 
-    /**
-     * @Assert\Collection()
-     */
-    public $groups;
+    private $groups;
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setGroups(?ArrayCollection $groups)
+    {
+        $this->groups = $groups;
+    }
+
+    public function getGroups(): ?Collection
+    {
+        return $this->groups;
+    }
 }

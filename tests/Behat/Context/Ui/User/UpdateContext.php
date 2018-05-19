@@ -4,13 +4,13 @@ declare(strict_types=1);
 
 namespace InternationsBehat\Context\Ui\User;
 
-use InternationsBehat\Context\Ui\BaseUiContext;
+use InternationsBehat\Context\BaseContext;
 use InternationsBehat\Page\User\ListPage;
 use InternationsBehat\Page\User\UpdatePage;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Exception\UnexpectedPageException;
 use Webmozart\Assert\Assert;
 
-class UpdateContext extends BaseUiContext
+class UpdateContext extends BaseContext
 {
     private $listPage;
 

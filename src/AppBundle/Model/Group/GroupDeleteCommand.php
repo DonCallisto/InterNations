@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace AppBundle\Model\Group;
 
-class GroupDeleteCommand
+class GroupDeleteCommand implements GroupDeleteCommandInterface
 {
     private $id;
 

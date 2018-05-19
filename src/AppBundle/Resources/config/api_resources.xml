@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<resources xmlns="https://api-platform.com/schema/metadata"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xsi:schemaLocation="https://api-platform.com/schema/metadata
+           https://api-platform.com/schema/metadata/metadata-2.0.xsd">
+
+    <resource class="AppBundle\API\DTO\User">
+        <property name="id" identifier="true">
+            <attribute name="swagger_context">
+                <attribute name="type">string</attribute>
+            </attribute>
+        </property>
+        <property name="username">
+            <attribute name="swagger_context">
+                <attribute name="type">string</attribute>
+            </attribute>
+        </property>
+        <property name="email">
+            <attribute name="swagger_context">
+                <attribute name="type">string</attribute>
+            </attribute>
+        </property>
+        <property name="password">
+            <attribute name="swagger_context">
+                <attribute name="type">string</attribute>
+            </attribute>
+        </property>
+        <property name="name">
+            <attribute name="swagger_context">
+                <attribute name="type">string</attribute>
+            </attribute>
+        </property>
+        <property name="groups">
+            <subresource resourceClass="AppBundle\API\DTO\Group" collection="true" />
+        </property>
+        <attribute name="denormalization_context">
+            <attribute name="groups">
+                <attribute name="group">user_write</attribute>
+            </attribute>
+        </attribute>
+        <attribute name="normalization_context">
+            <attribute name="groups">
+                <attribute name="group">user_read</attribute>
+            </attribute>
+        </attribute>
+        <collectionOperations>
+            <collectionOperation name="get">
+                <attribute name="method">GET</attribute>
+                <attribute name="path">/users</attribute>
+            </collectionOperation>
+            <collectionOperation name="post">
+                <attribute name="method">POST</attribute>
+                <attribute name="path">/users</attribute>
+                <attribute name="access_control">is_granted('ROLE_ADMIN')</attribute>
+                <attribute name="validation_groups">
+                    <attribute>registration</attribute>
+                </attribute>
+            </collectionOperation>
+        </collectionOperations>
+        <itemOperations>
+            <itemOperation name="get">
+                <attribute name="method">GET</attribute>
+                <attribute name="path">/users/{id}</attribute>
+            </itemOperation>
+            <itemOperation name="delete">
+                <attribute name="method">DELETE</attribute>
+                <attribute name="path">/users/{id}</attribute>
+                <attribute name="access_control">is_granted('ROLE_ADMIN')</attribute>
+            </itemOperation>
+        </itemOperations>
+    </resource>
+
+    <resource class="AppBundle\API\DTO\Group">
+        <property name="id" identifier="true" writable="false">
+            <attribute name="swagger_context">
+                <attribute name="type">string</attribute>
+            </attribute>
+        </property>
+        <property name="name">
+            <attribute name="swagger_context">
+                <attribute name="type">string</attribute>
+            </attribute>
+        </property>
+        <attribute name="denormalization_context">
+            <attribute name="groups">
+                <attribute name="group">group_write</attribute>
+            </attribute>
+        </attribute>
+        <attribute name="normalization_context">
+            <attribute name="groups">
+                <attribute name="group">group_read</attribute>
+            </attribute>
+        </attribute>
+        <collectionOperations>
+            <collectionOperation name="get">
+                <attribute name="method">GET</attribute>
+                <attribute name="path">/groups</attribute>
+            </collectionOperation>
+            <collectionOperation name="post">
+                <attribute name="method">POST</attribute>
+                <attribute name="path">/groups</attribute>
+                <attribute name="access_control">is_granted('ROLE_ADMIN')</attribute>
+            </collectionOperation>
+        </collectionOperations>
+        <itemOperations>
+            <itemOperation name="get">
+                <attribute name="method">GET</attribute>
+                <attribute name="path">/groups/{id}</attribute>
+            </itemOperation>
+            <itemOperation name="delete">
+                <attribute name="method">DELETE</attribute>
+                <attribute name="path">/groups/{id}</attribute>
+                <attribute name="access_control">is_granted('ROLE_ADMIN')</attribute>
+                <attribute name="validation_groups">
+                    <attribute>delete</attribute>
+                </attribute>
+            </itemOperation>
+            <itemOperation name="add_user_to_group">
+                <attribute name="route_name">add_user_to_group</attribute>
+                <attribute name="swagger_context">
+                    <attribute name="summary">Add existing user to a group</attribute>
+                </attribute>
+            </itemOperation>
+            <itemOperation name="remove_user_from_group">
+                <attribute name="route_name">remove_user_from_group</attribute>
+                <attribute name="swagger_context">
+                    <attribute name="summary">Remove user from a group</attribute>
+                </attribute>
+            </itemOperation>
+        </itemOperations>
+    </resource>
+
+    <resource class="AppBundle\API\DTO\UserGroupDTO">
+        <property name="id">
+            <attribute name="swagger_context">
+                <attribute name="type">string</attribute>
+            </attribute>
+        </property>
+        <collectionOperations />
+        <itemOperations />
+    </resource>
+
+</resources>

@@ -4,12 +4,12 @@ declare(strict_types=1);
 
 namespace AppBundle\Model\Group;
 
-use Symfony\Component\Validator\Constraints as Assert;
-
-class GroupCreationCommand
+class GroupCreationCommand implements GroupCreationCommandInterface
 {
-    /**
-     * @Assert\NotBlank()
-     */
     public $name;
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
 }

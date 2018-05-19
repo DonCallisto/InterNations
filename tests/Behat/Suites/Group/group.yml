@@ -1,3 +1,7 @@
 imports:
+  - api_creation.yml
+  - api_delete.yml
+  - api_remove_user.yml
+  - api_add_user.yml
   - creation.yml
   - delete.yml

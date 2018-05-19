@@ -5,24 +5,31 @@ declare(strict_types=1);
 namespace InternationsBehat\Context\Ui\User;
 
 use AppBundle\Entity\User;
-use InternationsBehat\Context\Ui\BaseUiContext;
+use AppBundle\Repository\UserRepository;
+use InternationsBehat\Context\BaseContext;
+use InternationsBehat\Context\UserTransformer;
 use InternationsBehat\Page\User\ListPage;
 use InternationsBehat\Page\User\RegisterPage;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Exception\UnexpectedPageException;
 use Webmozart\Assert\Assert;
 
-class RegistrationContext extends BaseUiContext
+class RegistrationContext extends BaseContext
 {
+    use UserTransformer;
+
     const NEW_USER_USERNAME = 'username';
 
     private $registerPage;
 
     private $listPage;
 
-    public function __construct(RegisterPage $registerPage, ListPage $listPage)
+    private $userRepo;
+
+    public function __construct(RegisterPage $registerPage, ListPage $listPage, UserRepository $userRepository)
     {
         $this->registerPage = $registerPage;
         $this->listPage = $listPage;
+        $this->userRepo = $userRepository;
     }
 
     /**
@@ -42,7 +49,7 @@ class RegistrationContext extends BaseUiContext
      */
     public function userShouldBeCreated()
     {
-        $user = $this->findUser(self::NEW_USER_USERNAME);
+        $user = $this->fromUsernameToUser(self::NEW_USER_USERNAME);
 
         Assert::true($this->listPage->isOpen(), 'User list page is not open');
         Assert::isInstanceOf($user, User::class, 'User not created!');
@@ -55,5 +62,10 @@ class RegistrationContext extends BaseUiContext
     public function userShouldNotBeAllowedToBeCreated()
     {
         Assert::eq($this->getSession()->getStatusCode(), 403, 'User creation enabled!');
+    }
+
+    protected function getUserRepo(): UserRepository
+    {
+        return $this->userRepo;
     }
 }

@@ -1,0 +1,12 @@
+default:
+  suites:
+    group_api_delete:
+      paths:
+        - '%paths.base%/Features/Group'
+      contexts:
+          - InternationsBehat\Context\API\User\LoginContext: { userRepository: '@AppBundle\Repository\UserRepository', JWTManager: '@Lexik\Bundle\JWTAuthenticationBundle\Services\JWTTokenManagerInterface', client: '@eight_points_guzzle.client.api' }
+          - InternationsBehat\Context\API\Group\DeleteContext: { client: '@eight_points_guzzle.client.api', groupRepository: '@AppBundle\Repository\GroupRepository' }
+          - InternationsBehat\Context\GroupFixtureContext
+          - InternationsBehat\Context\UserFixtureContext
+      filters:
+        tags: "@group_delete && @api"

@@ -5,21 +5,28 @@ declare(strict_types=1);
 namespace InternationsBehat\Context\Ui\User;
 
 use AppBundle\Entity\User;
-use InternationsBehat\Context\Ui\BaseUiContext;
+use AppBundle\Repository\UserRepository;
+use InternationsBehat\Context\BaseContext;
+use InternationsBehat\Context\UserTransformer;
 use InternationsBehat\Page\User\ListPage;
 use Webmozart\Assert\Assert;
 
-class DeleteContext extends BaseUiContext
+class DeleteContext extends BaseContext
 {
+    use UserTransformer;
+
     private $listPage;
 
-    public function __construct(ListPage $listPage)
+    private $userRepo;
+
+    public function __construct(ListPage $listPage, UserRepository $userRepository)
     {
         $this->listPage = $listPage;
+        $this->userRepo = $userRepository;
     }
 
     /**
-     * @When /^I try to create delete user with "([^"]*)" username$/
+     * @When /^I try to delete user with "([^"]*)" username$/
      */
     public function tryDeleteUser(string $username)
     {
@@ -28,12 +35,10 @@ class DeleteContext extends BaseUiContext
     }
 
     /**
-     * @Then /^User with "([^"]*)" username should be deleted$/
+     * @Then /^(User with "(?:[^"]*)" username) should be deleted$/
      */
-    public function userShouldBeDeleted(string $username)
+    public function userShouldBeDeleted(?User $user)
     {
-        $user = $this->findUser($username);
-
         Assert::true($this->listPage->isOpen(), 'User list page is not open');
         Assert::null($user, 'User not deleted!');
         Assert::true($this->listPage->isUserDeleteMessageShown(), 'User message not shown');
@@ -48,14 +53,17 @@ class DeleteContext extends BaseUiContext
     }
 
     /**
-     * @Then /^I should not be allowed to delete user with "([^"]*)" username$/
+     * @Then /^I should not be allowed to delete (user with "(?:[^"]*)" username)$/
      */
-    public function userShouldNotBeAllowedToDeleteHimself(string $username)
+    public function userShouldNotBeAllowedToDeleteHimself(?User $user)
     {
-        $user = $this->findUser($username);
-
         Assert::true($this->listPage->isOpen(), 'User list page is not open');
         Assert::isInstanceOf($user, User::class, 'User deleted');
         Assert::true($this->listPage->isUserDeleteHimselfMessageShown(), 'User message not shown');
+    }
+
+    protected function getUserRepo(): UserRepository
+    {
+        return $this->userRepo;
     }
 }

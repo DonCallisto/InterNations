@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace InternationsBehat\Context\Ui\User;
+namespace InternationsBehat\Context;
 
 use AppBundle\Entity\Group;
 use AppBundle\Entity\User;
-use InternationsBehat\Context\Ui\BaseUiContext;
 
-class FixtureContext extends BaseUiContext
+class UserFixtureContext extends BaseContext
 {
     /**
      * @Given /^There is an administrator user with "([^"]*)" username and "([^"]*)" password$/
@@ -54,6 +53,20 @@ class FixtureContext extends BaseUiContext
     {
         $user = $this->createUser($username, 'password', $email, ['ROLE_USER']);
         $group = new Group('group');
+        $group->addUser($user);
+
+        $em = $this->getEntityManager();
+        $em->persist($group);
+        $em->flush();
+    }
+
+    /**
+     * @Given /^There is a user with "([^"]*)" username and "([^"]*)" email in a group with "([^"]*)" name$/
+     */
+    public function createUserFromEmailWithSpecificGroup(string $username, string $email, string $groupName)
+    {
+        $user = $this->createUser($username, 'password', $email, ['ROLE_USER']);
+        $group = new Group($groupName);
         $group->addUser($user);
 
         $em = $this->getEntityManager();

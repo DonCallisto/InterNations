@@ -5,17 +5,24 @@ declare(strict_types=1);
 namespace InternationsBehat\Context\Ui\Group;
 
 use AppBundle\Entity\Group;
-use InternationsBehat\Context\Ui\BaseUiContext;
+use AppBundle\Repository\GroupRepository;
+use InternationsBehat\Context\BaseContext;
+use InternationsBehat\Context\GroupTransformer;
 use InternationsBehat\Page\Group\ListPage;
 use Webmozart\Assert\Assert;
 
-class DeleteContext extends BaseUiContext
+class DeleteContext extends BaseContext
 {
+    use GroupTransformer;
+
     private $listPage;
 
-    public function __construct(ListPage $listPage)
+    private $groupRepo;
+
+    public function __construct(ListPage $listPage, GroupRepository $groupRepository)
     {
         $this->listPage = $listPage;
+        $this->groupRepo = $groupRepository;
     }
 
     /**
@@ -28,24 +35,20 @@ class DeleteContext extends BaseUiContext
     }
 
     /**
-     * @Then /^Group with "([^"]*)" name should be deleted$/
+     * @Then /^(Group with "(?:[^"]*)" name) should be deleted$/
      */
-    public function groupShouldBeDeleted(string $name)
+    public function groupShouldBeDeleted(?Group $group)
     {
-        $group = $this->findGroup($name);
-
         Assert::true($this->listPage->isOpen(), 'Group list page is not open');
         Assert::null($group, 'Group not deleted!');
         Assert::true($this->listPage->isGroupDeleteMessageShown(), 'Group message not shown');
     }
 
     /**
-     * @Then /^Group with "([^"]*)" name should not be deleted$/
+     * @Then /^(Group with "(?:[^"]*)" name) should not be deleted$/
      */
-    public function groupShouldNotBeDeleted(string $name)
+    public function groupShouldNotBeDeleted(?Group $group)
     {
-        $group = $this->findGroup($name);
-
         Assert::true($this->listPage->isOpen(), 'Group list page is not open');
         Assert::isInstanceOf($group, Group::class, 'Group deleted!');
         Assert::true($this->listPage->isGroupCannoteDeleteDueToUsersMessageShown(), 'Group message not shown');
@@ -57,5 +60,10 @@ class DeleteContext extends BaseUiContext
     public function groupShouldNotBeAllowedToBeDeleted()
     {
         Assert::eq($this->getSession()->getStatusCode(), 403, 'Group deleted!');
+    }
+
+    protected function getGroupRepo(): GroupRepository
+    {
+        return $this->groupRepo;
     }
 }

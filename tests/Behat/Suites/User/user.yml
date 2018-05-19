@@ -1,4 +1,6 @@
 imports:
+  - api_creation.yml
+  - api_delete.yml
   - creation.yml
   - delete.yml
   - update.yml

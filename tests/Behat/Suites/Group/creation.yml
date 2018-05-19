@@ -4,8 +4,8 @@ default:
       paths:
         - '%paths.base%/Features/Group'
       contexts:
-         - InternationsBehat\Context\Ui\User\FixtureContext
+         - InternationsBehat\Context\UserFixtureContext
          - InternationsBehat\Context\Ui\User\LoginContext
-         - InternationsBehat\Context\Ui\Group\CreateContext
+         - InternationsBehat\Context\Ui\Group\CreateContext: { groupRepository: '@AppBundle\Repository\GroupRepository' }
       filters:
-        tags: "@group_creation"
+        tags: "@group_creation && @ui"

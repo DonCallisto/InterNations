@@ -4,8 +4,8 @@ default:
       paths:
         - '%paths.base%/Features/User'
       contexts:
-         - InternationsBehat\Context\Ui\User\FixtureContext
+         - InternationsBehat\Context\UserFixtureContext
          - InternationsBehat\Context\Ui\User\LoginContext
-         - InternationsBehat\Context\Ui\User\RegistrationContext
+         - InternationsBehat\Context\Ui\User\RegistrationContext: { userRepository: '@AppBundle\Repository\UserRepository' }
       filters:
-        tags: "@user_creation"
+        tags: "@user_creation && @ui"

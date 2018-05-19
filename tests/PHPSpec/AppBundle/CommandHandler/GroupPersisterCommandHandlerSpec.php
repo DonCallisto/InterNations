@@ -6,7 +6,7 @@ namespace Tests\PHPSpec\AppBundle\CommandHandler;
 
 use AppBundle\Entity\Group;
 use AppBundle\Factory\GroupFactory;
-use AppBundle\Model\Group\GroupCreationCommand;
+use AppBundle\Model\Group\GroupCreationCommandInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use PhpSpec\ObjectBehavior;
 use Symfony\Component\Validator\ConstraintViolation;
@@ -24,13 +24,13 @@ class GroupPersisterCommandHandlerSpec extends ObjectBehavior
         GroupFactory $groupFactory,
         Group $group,
         EntityManagerInterface $em,
-        GroupCreationCommand $gcc,
+        GroupCreationCommandInterface $gcc,
         ValidatorInterface $validator
     )
     {
         $name = 'name';
 
-        $gcc->name = $name;
+        $gcc->getName()->willReturn($name);
 
         $validator->validate($gcc)->willReturn(new ConstraintViolationList([]));
 
@@ -42,7 +42,7 @@ class GroupPersisterCommandHandlerSpec extends ObjectBehavior
     }
 
     public function it_should_throw_exception_if_create_command_is_not_valid(
-        GroupCreationCommand $gcc,
+        GroupCreationCommandInterface $gcc,
         ValidatorInterface $validator
     ) {
         $violations = new ConstraintViolationList([

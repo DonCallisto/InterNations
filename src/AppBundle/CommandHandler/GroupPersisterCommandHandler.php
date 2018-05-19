@@ -6,7 +6,7 @@ namespace AppBundle\CommandHandler;
 
 use AppBundle\Entity\Group;
 use AppBundle\Factory\GroupFactory;
-use AppBundle\Model\Group\GroupCreationCommand;
+use AppBundle\Model\Group\GroupCreationCommandInterface;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -25,7 +25,7 @@ class GroupPersisterCommandHandler
         $this->validator = $validator;
     }
 
-    public function create(GroupCreationCommand $command): Group
+    public function create(GroupCreationCommandInterface $command): Group
     {
         $errors = $this->validator->validate($command);
         if ($errors->count()) {
@@ -33,7 +33,7 @@ class GroupPersisterCommandHandler
             throw new \InvalidArgumentException('Please, provide a valid command');
         }
 
-        $group = $this->groupFactory->create($command->name);
+        $group = $this->groupFactory->create($command->getName());
 
         $this->em->persist($group);
         $this->em->flush();

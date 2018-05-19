@@ -6,7 +6,7 @@ namespace AppBundle\CommandHandler;
 
 use AppBundle\Entity\User;
 use AppBundle\Factory\UserFactory;
-use AppBundle\Model\User\UserRegistrationCommand;
+use AppBundle\Model\User\UserRegistrationCommandInterface;
 use AppBundle\Model\User\UserUpdateCommand;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
@@ -26,7 +26,7 @@ class UserCommandHandler
         $this->validator = $validator;
     }
 
-    public function register(UserRegistrationCommand $command): User
+    public function register(UserRegistrationCommandInterface $command): User
     {
         $errors = $this->validator->validate($command);
         if ($errors->count()) {
@@ -35,13 +35,14 @@ class UserCommandHandler
         }
 
         $user = $this->userFactory->create(
-            $command->username,
-            $command->email,
-            $command->password,
-            $command->name
+            $command->getUsername(),
+            $command->getEmail(),
+            $command->getPassword(),
+            $command->getName()
         );
 
-        $user->joinGroups($command->groups);
+        $user->joinGroups($command->getGroups());
+        $user->setEnabled(true);
 
         $this->em->persist($user);
         $this->em->flush();

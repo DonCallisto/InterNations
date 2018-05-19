@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AppBundle\CommandHandler;
 
 use AppBundle\Entity\Group;
-use AppBundle\Model\Group\GroupCreationCommand;
+use AppBundle\Model\Group\GroupCreationCommandInterface;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
 class TokenAwareGroupPersisterHandler
@@ -23,7 +23,7 @@ class TokenAwareGroupPersisterHandler
     /**
      * @throws GroupHandlingForbiddenException
      */
-    public function create(GroupCreationCommand $command): Group
+    public function create(GroupCreationCommandInterface $command): Group
     {
         $this->throwExceptionIfUserNotAdmin();
 

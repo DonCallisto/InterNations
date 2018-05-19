@@ -7,7 +7,7 @@ namespace Tests\PHPSpec\AppBundle\CommandHandler;
 use AppBundle\CommandHandler\UserCommandHandler;
 use AppBundle\CommandHandler\UserHandlingForbiddenException;
 use AppBundle\Entity\User;
-use AppBundle\Model\User\UserRegistrationCommand;
+use AppBundle\Model\User\UserRegistrationCommandInterface;
 use AppBundle\Model\User\UserUpdateCommand;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
@@ -23,7 +23,7 @@ class TokenAwareUserCommandHandlerSpec extends ObjectBehavior
     public function it_does_not_let_non_admin_user_to_create_user(
         AuthorizationCheckerInterface $authChecker,
         UserCommandHandler $userCommandHandler,
-        UserRegistrationCommand $command
+        UserRegistrationCommandInterface $command
     ) {
         $authChecker->isGranted('ROLE_ADMIN')->willReturn(false);
 
@@ -35,7 +35,7 @@ class TokenAwareUserCommandHandlerSpec extends ObjectBehavior
     public function it_does_let_admin_user_to_create_user(
         AuthorizationCheckerInterface $authChecker,
         UserCommandHandler $userCommandHandler,
-        UserRegistrationCommand $command,
+        UserRegistrationCommandInterface $command,
         User $user
     ) {
         $authChecker->isGranted('ROLE_ADMIN')->willReturn(true);

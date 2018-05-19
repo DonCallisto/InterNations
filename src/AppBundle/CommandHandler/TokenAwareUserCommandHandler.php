@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AppBundle\CommandHandler;
 
 use AppBundle\Entity\User;
-use AppBundle\Model\User\UserRegistrationCommand;
+use AppBundle\Model\User\UserRegistrationCommandInterface;
 use AppBundle\Model\User\UserUpdateCommand;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
 
@@ -24,7 +24,7 @@ class TokenAwareUserCommandHandler
     /**
      * @throws UserHandlingForbiddenException
      */
-    public function register(UserRegistrationCommand $command): User
+    public function register(UserRegistrationCommandInterface $command): User
     {
         $this->throwExceptionIfUserNotAdmin();
 

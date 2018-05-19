@@ -2,13 +2,12 @@
 
 declare(strict_types=1);
 
-namespace InternationsBehat\Context\Ui\Group;
+namespace InternationsBehat\Context;
 
 use AppBundle\Entity\Group;
 use AppBundle\Entity\User;
-use InternationsBehat\Context\Ui\BaseUiContext;
 
-class FixtureContext extends BaseUiContext
+class GroupFixtureContext extends BaseContext
 {
     /**
      * @Given /^There is a group with "([^"]*)" name and no users$/

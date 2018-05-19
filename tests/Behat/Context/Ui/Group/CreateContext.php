@@ -5,24 +5,31 @@ declare(strict_types=1);
 namespace InternationsBehat\Context\Ui\Group;
 
 use AppBundle\Entity\Group;
-use InternationsBehat\Context\Ui\BaseUiContext;
+use AppBundle\Repository\GroupRepository;
+use InternationsBehat\Context\BaseContext;
+use InternationsBehat\Context\GroupTransformer;
 use InternationsBehat\Page\Group\CreatePage;
 use InternationsBehat\Page\Group\ListPage;
 use SensioLabs\Behat\PageObjectExtension\PageObject\Exception\UnexpectedPageException;
 use Webmozart\Assert\Assert;
 
-class CreateContext extends BaseUiContext
+class CreateContext extends BaseContext
 {
+    use GroupTransformer;
+
     const GROUP_NAME = 'aGroup';
 
     private $createPage;
 
     private $listPage;
 
-    public function __construct(CreatePage $createPage, ListPage $listaPage)
+    private $groupRepo;
+
+    public function __construct(CreatePage $createPage, ListPage $listaPage, GroupRepository $groupRepository)
     {
         $this->createPage = $createPage;
         $this->listPage = $listaPage;
+        $this->groupRepo = $groupRepository;
     }
 
     /**
@@ -42,7 +49,7 @@ class CreateContext extends BaseUiContext
      */
     public function groupShouldBeCreated()
     {
-        $group = $this->findGroup(self::GROUP_NAME);
+        $group = $this->fromNameToGroup(self::GROUP_NAME);
 
         Assert::true($this->listPage->isOpen(), 'Group list page is not open');
         Assert::isInstanceOf($group, Group::class, 'Group not created!');
@@ -55,5 +62,10 @@ class CreateContext extends BaseUiContext
     public function groupShouldNotBeAllowedToBeCreated()
     {
         Assert::eq($this->getSession()->getStatusCode(), 403, 'Group creation enabled!');
+    }
+
+    protected function getGroupRepo(): GroupRepository
+    {
+        return $this->groupRepo;
     }
 }

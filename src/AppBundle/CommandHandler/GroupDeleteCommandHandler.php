@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace AppBundle\CommandHandler;
 
 use AppBundle\Entity\Group;
-use AppBundle\Model\Group\GroupDeleteCommand;
+use AppBundle\Model\Group\GroupDeleteCommandInterface;
 use AppBundle\Repository\GroupRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
@@ -24,7 +24,7 @@ class GroupDeleteCommandHandler
     /**
      * @throws GroupNotFoundException
      */
-    public function delete(GroupDeleteCommand $command)
+    public function delete(GroupDeleteCommandInterface $command)
     {
         /** @var $group Group|null */
         $group = $this->repo->find($command->getId());

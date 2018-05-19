@@ -7,7 +7,7 @@ namespace Tests\PHPSpec\AppBundle\CommandHandler;
 use AppBundle\CommandHandler\GroupDeleteCommandHandler;
 use AppBundle\CommandHandler\GroupHandlingForbiddenException;
 use AppBundle\CommandHandler\GroupNotFoundException;
-use AppBundle\Model\Group\GroupDeleteCommand;
+use AppBundle\Model\Group\GroupDeleteCommandInterface;
 use PhpSpec\ObjectBehavior;
 use Prophecy\Argument;
 use Symfony\Component\Security\Core\Authorization\AuthorizationCheckerInterface;
@@ -22,7 +22,7 @@ class TokenAwareGroupDeleteHandlerSpec extends ObjectBehavior
     public function it_does_not_let_non_admin_user_to_delete_group(
         AuthorizationCheckerInterface $authChecker,
         GroupDeleteCommandHandler $commandHandler,
-        GroupDeleteCommand $command
+        GroupDeleteCommandInterface $command
     ) {
         $authChecker->isGranted('ROLE_ADMIN')->willReturn(false);
 
@@ -34,7 +34,7 @@ class TokenAwareGroupDeleteHandlerSpec extends ObjectBehavior
     public function it_does_let_admin_user_to_create_user(
         AuthorizationCheckerInterface $authChecker,
         GroupDeleteCommandHandler $commandHandler,
-        GroupDeleteCommand $command
+        GroupDeleteCommandInterface $command
     ) {
         $authChecker->isGranted('ROLE_ADMIN')->willReturn(true);
 
@@ -46,7 +46,7 @@ class TokenAwareGroupDeleteHandlerSpec extends ObjectBehavior
     public function it_cause_an_error_if_group_does_not_exists(
         AuthorizationCheckerInterface $authChecker,
         GroupDeleteCommandHandler $commandHandler,
-        GroupDeleteCommand $command
+        GroupDeleteCommandInterface $command
     ) {
         $authChecker->isGranted('ROLE_ADMIN')->willReturn(true);
 

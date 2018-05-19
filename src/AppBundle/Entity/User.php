@@ -7,7 +7,6 @@ namespace AppBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\Criteria;
-use FOS\UserBundle\Model\GroupInterface;
 use FOS\UserBundle\Model\User as FOSUser;
 use Ramsey\Uuid\Uuid;
 
@@ -50,16 +49,18 @@ class User extends FOSUser
         $this->setPlainPassword($newPassword);
     }
 
-    public function addGroupToUser(Group $group)
+    public function addGroupToUser(Group $group): bool
     {
         $criteria = $this->getGroupMatchingCriteriaForFilters($group);
 
         if ($this->groups->matching($criteria)->contains($group)) {
-            return;
+            return false;
         }
 
         $this->groups->add($group);
         $group->addUser($this);
+
+        return true;
     }
 
     private function getGroupMatchingCriteriaForFilters(Group $group): Criteria
@@ -67,16 +68,18 @@ class User extends FOSUser
         return Criteria::create()->where(Criteria::expr()->eq("id", $group->getId()));
     }
 
-    public function removeGroupFromUser(Group $group)
+    public function removeGroupFromUser(Group $group): bool
     {
         $criteria = $this->getGroupMatchingCriteriaForFilters($group);
 
-        if ($this->groups->matching($criteria)->contains($group)) {
-            return;
+        if (!$this->groups->matching($criteria)->contains($group)) {
+            return false;
         }
 
         $this->groups->removeElement($group);
         $group->removeUser($this);
+
+        return true;
     }
 
     public function getGroups()
@@ -84,7 +87,7 @@ class User extends FOSUser
         return $this->groups;
     }
 
-    public function joinGroups(Collection $groups)
+    public function joinGroups(?Collection $groups)
     {
         $this->groups = $groups;
     }
